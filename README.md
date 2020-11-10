@@ -1,1 +1,1 @@
-"# Spotify API Wrapper" 
+# Spotify API Wrapper

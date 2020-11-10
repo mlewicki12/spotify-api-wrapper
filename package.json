@@ -1,0 +1,45 @@
+{
+  "name": "spotify-api-wrapper",
+  "version": "1.0.0",
+  "description": "\"# Spotify API Wrapper\"",
+  "main": "index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "@typescript-eslint/eslint-plugin": "^4.7.0",
+    "@typescript-eslint/parser": "^4.7.0",
+    "eslint": "^7.13.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --config .jestconfig.json",
+    "lint": "eslint -c .eslintrc.json src/",
+
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test",
+    
+    "preversion": "npm run lint",
+    "version": "git add -p src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlewicki12/spotify-api-wrapper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mlewicki12/spotify-api-wrapper/issues"
+  },
+  "homepage": "https://github.com/mlewicki12/spotify-api-wrapper#readme"
+}

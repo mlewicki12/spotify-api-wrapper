@@ -8,7 +8,7 @@ export default class Util {
    * @param length - desired length of string
    * @returns string of length <length>
    */
-  static generateRandomString = (length : number) : string => {
+  static generateRandomString = (length: number) : string => {
     let text = '';
 
     for (let i = 0; i < length; i++) {

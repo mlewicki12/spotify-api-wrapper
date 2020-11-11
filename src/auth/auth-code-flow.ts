@@ -3,7 +3,6 @@ import Axios, { AxiosResponse } from 'axios';
 import {stringify} from 'query-string';
 
 import Util from '../tools/util';
-import AuthObject from './auth-object';
 
 export default class AuthCodeFlow {
   /* state used for request verification, randomly generated */

@@ -1,8 +1,11 @@
 
+// this is still here as a leftover from the tutorial I did on setting up packages
+// leaving it here for now, bc I want to keep the test as a reference
 export const Greeter = (name:string) : string => `Hello ${name}`;
 
 import Auth from './auth/auth-code-flow';
-import AuthObject from './auth/auth-object';
+import Types from './types/types';
+import { AuthObject } from './types/auth-object';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -13,6 +16,9 @@ export class SpotifyAPI {
   private _clientSecret   : string;
 
   private _auth?          : Auth;
+  private _access_data?   : AuthObject;
+
+  Types = Types;
 
   constructor(id:string, secret:string) {
     this._clientId = id;
@@ -40,10 +46,12 @@ export class SpotifyAPI {
         };
       }
 
-      return {
+      this._access_data = {
         access_token: response.data.access_token,
         refresh_token: response.data.refresh_token
       };
+
+      return this._access_data;
     } catch(error) {
       return {error: error.message};
     }

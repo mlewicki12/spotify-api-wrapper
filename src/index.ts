@@ -4,8 +4,7 @@
 export const Greeter = (name:string) : string => `Hello ${name}`;
 
 import Auth from './auth/auth-code-flow';
-import Types from './types/types';
-import { AuthObject } from './types/auth-object';
+import { AuthObject, AuthError } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -17,8 +16,6 @@ export class SpotifyAPI {
 
   private _auth?          : Auth;
   private _access_data?   : AuthObject;
-
-  Types = Types;
 
   constructor(id:string, secret:string) {
     this._clientId = id;

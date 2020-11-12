@@ -62,10 +62,11 @@ export class Artist {
 }
 
 export class AuthObject {
-  access_token?   : string;
-  refresh_token?  : string;
-  expires_in?     : number;
-  error?          : string;
+  access_token!   : string;
+  token_type!     : string;
+  refresh_token!  : string;
+  scope!          : string;
+  expires_in!     : number;
 }
 
 export class Copyright {
@@ -103,6 +104,11 @@ export class Paging<T> {
   previous!   : string;
   total!      : number;
 }
+
+export class PagingParams {
+  limit?: number;
+  offset?: number;
+};
 
 export class Restriction {
   reason!: string;

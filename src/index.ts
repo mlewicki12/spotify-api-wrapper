@@ -4,7 +4,8 @@
 export const Greeter = (name:string) : string => `Hello ${name}`;
 
 import Auth from './auth/auth-code-flow';
-import { AuthObject, AuthError } from './types';
+import { AlbumsEndpoint } from './endpoints/albums';
+import { Album, AuthError, AuthObject, Error, Paging, SimpleTrack } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -22,7 +23,7 @@ export class SpotifyAPI {
     this._clientSecret = secret;
   }
 
-  getAuthLink(redirect: string, scopes: Array<string>) : string {
+  getAuthLink = (redirect: string, scopes: Array<string>) : string => {
     if(!this._auth) {
       this._auth = new Auth(redirect);
     }
@@ -30,27 +31,49 @@ export class SpotifyAPI {
     return this._auth.beginAuthorize(this._clientId, scopes);
   }
 
-  async getAccessToken(code: string, state: string) : Promise<AuthObject> {
+  getAccessToken = async (code: string, state: string) : Promise<AuthObject | AuthError> => {
     if(!this._auth) {
-      return {error: 'no existing authorization object found, did you mean to call getAuthLink?'};
+      return {error: 'data_error', error_description: 'no existing authorization object found, did you mean to call getAuthLink?'};
     }
 
     try {
-      const response = await this._auth.requestTokens(this._clientId, this._clientSecret, code, state);
-      if(response.data.error) {
-        return {
-          error: response.data.error
-        };
+      const data = await this._auth.requestTokens(this._clientId, this._clientSecret, code, state);
+      if((data as AuthObject).access_token) {
+        this._access_data = data as AuthObject;
       }
 
-      this._access_data = {
-        access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token
-      };
-
-      return this._access_data;
+      return data;
     } catch(error) {
-      return {error: error.message};
+      return {error: error.type, error_description: error.message};
     }
+  }
+
+  setAccessToken = (token: AuthObject) : SpotifyAPI => {
+    this._access_data = token;
+    return this;
+  }
+
+  getAlbum = async (id: string) : Promise<Album | Error> => {
+    if(this._access_data) {
+      return AlbumsEndpoint.getAlbum(id, this._access_data?.access_token);
+    }
+    
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getAlbumTracks = async (id: string, limit?: number, offset?: number) : Promise<Paging<SimpleTrack> | Error> => {
+    if(this._access_data) {
+      return AlbumsEndpoint.getAlbumTracks(id, this._access_data?.access_token, limit, offset);
+    }
+    
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getAlbums = async (ids: Array<string>) : Promise<Array<Album> | Error> => {
+    if(this._access_data) {
+      return AlbumsEndpoint.getAlbums(ids, this._access_data?.access_token);
+    }
+    
+    return {status: 0, message: 'access_data not defined'};
   }
 }

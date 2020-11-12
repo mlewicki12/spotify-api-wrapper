@@ -3,6 +3,7 @@ import Axios, { AxiosResponse } from 'axios';
 import {stringify} from 'query-string';
 
 import Util from '../tools/util';
+import { AuthError, AuthObject } from '../types';
 
 export default class AuthCodeFlow {
   /* state used for request verification, randomly generated */
@@ -44,12 +45,12 @@ export default class AuthCodeFlow {
    * @param state - the state received from spotify after using beginAuthorize
    * @returns authobject containing either access_token and refresh_token or error
    */
-  requestTokens = (id: string, secret: string, code: string, state: string) : Promise<AxiosResponse> => {
+  requestTokens = async (id: string, secret: string, code: string, state: string) : Promise<AuthObject | AuthError> => {
     if(state != this._state) {
-      throw {message: 'provided states don\'t match'};
+      throw {type: 'data_error', message: 'provided states don\'t match'};
     }
 
-    return Axios.post('https://accounts.spotify.com/api/token', stringify({
+    return await Axios.post('https://accounts.spotify.com/api/token', stringify({
       grant_type: 'authorization_code',
       code: code,
       redirect_uri: this._redirect
@@ -58,6 +59,8 @@ export default class AuthCodeFlow {
         Authorization: 'Basic ' + Buffer.from(id + ':' + secret, 'utf8').toString('base64'),
         'Content-Type': 'application/x-www-form-urlencoded'
       }
+    }).then(response => {
+      return response.data;
     });
   }
 }

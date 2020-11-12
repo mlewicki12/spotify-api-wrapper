@@ -61,6 +61,9 @@ export default class AuthCodeFlow {
       }
     }).then(response => {
       return response.data;
+    }).catch(error => {
+      // UNTESTED
+      return error.response.data;
     });
   }
 }

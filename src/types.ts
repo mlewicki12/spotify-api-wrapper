@@ -105,11 +105,6 @@ export class Paging<T> {
   total!      : number;
 }
 
-export class PagingParams {
-  limit?: number;
-  offset?: number;
-};
-
 export class Restriction {
   reason!: string;
 }
@@ -163,4 +158,11 @@ export class TrackLink {
   id!                 : string;
   type!               : string;
   uri!                : string;
+}
+
+export class SpotifyRequestParams {
+  include_groups?:  Array<string>;
+  country?:         string;
+  limit?:           number;
+  offset?:          number;
 }

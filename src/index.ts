@@ -5,6 +5,7 @@ export const Greeter = (name:string) : string => `Hello ${name}`;
 
 import Auth from './auth/auth-code-flow';
 import { AlbumsEndpoint } from './endpoints/albums';
+import { ArtistsEndpoint } from './endpoints/artists';
 import { Album, Artist, AuthError, AuthObject, Error, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track } from './types';
 
 export enum AuthType {
@@ -74,6 +75,46 @@ export class SpotifyAPI {
       return AlbumsEndpoint.getTracks(id, this._access_data.access_token, params);
     }
     
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getArtist = async (id: string) : Promise<Artist | Error> => {
+    if(this._access_data) {
+      return ArtistsEndpoint.getArtist(id, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getArtists = async (ids: Array<string>) : Promise<Array<Artist> | Error> => {
+    if(this._access_data) {
+      return ArtistsEndpoint.getArtists(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getArtistAlbums = async (id: string, params?: SpotifyRequestParams) : Promise<Paging<SimpleAlbum> | Error> => {
+    if(this._access_data) {
+      return ArtistsEndpoint.getAlbums(id, this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getArtistTopTracks = async (id: string, country: string) : Promise<Array<Track> | Error> => {
+    if(this._access_data) {
+      return ArtistsEndpoint.getTopTracks(id, this._access_data.access_token, country);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getRelatedArtists = async (id: string) : Promise<Array<Track> | Error> => {
+    if(this._access_data) {
+      return ArtistsEndpoint.getRelatedArtists(id, this._access_data.access_token);
+    }
+
     return {status: 0, message: 'access_data not defined'};
   }
 }

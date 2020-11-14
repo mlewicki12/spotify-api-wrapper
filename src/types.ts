@@ -61,6 +61,91 @@ export class Artist {
   uri!            : string;
 }
 
+export class SimpleEpisode {
+  audio_preview_url!      : string;
+  description!            : string;
+  duration_ms!            : string;
+  explicit!               : boolean;
+  external_urls!          : any;
+  href!                   : string;
+  id!                     : string;
+  images!                 : Array<Image>;
+  is_externally_hosted!   : boolean;
+  is_playable!            : boolean;
+  language!               : string;
+  languages!              : Array<string>;
+  name!                   : string;
+  release_date!           : string;
+  release_date_precision! : string;
+  resume_point!           : ResumePoint;
+  type!                   : string;
+  uri!                    : string;
+}
+
+export class Episode {
+  audio_preview_url!      : string;
+  description!            : string;
+  duration_ms!            : string;
+  explicit!               : boolean;
+  external_urls!          : any;
+  href!                   : string;
+  id!                     : string;
+  images!                 : Array<Image>;
+  is_externally_hosted!   : boolean;
+  is_playable!            : boolean;
+  language!               : string;
+  languages!              : Array<string>;
+  name!                   : string;
+  release_date!           : string;
+  release_date_precision! : string;
+  resume_point!           : ResumePoint;
+  show!                   : SimpleShow;
+  type!                   : string;
+  uri!                    : string;
+}
+
+export class ResumePoint {
+  fully_played!       : boolean;
+  resume_position_ms! : number;
+}
+
+export class SimpleShow {
+  available_markets!    : Array<string>;
+  copyrights!           : Array<Copyright>;
+  description!          : string;
+  explicit!             : boolean;
+  external_urls!        : any;
+  href!                 : string;
+  id!                   : string;
+  images!               : Array<Image>;
+  is_externally_hosted! : boolean;
+  languages!            : Array<string>;
+  media_type!           : string;
+  name!                 : string;
+  publisher!            : string;
+  type!                 : string;
+  uri!                  : string;
+}
+
+export class Show {
+  available_markets!    : Array<string>;
+  copyrights!           : Array<Copyright>;
+  description!          : string;
+  explicit!             : boolean;
+  episodes!             : Paging<SimpleEpisode>;
+  external_urls!        : any;
+  href!                 : string;
+  id!                   : string;
+  images!               : Array<Image>;
+  is_externally_hosted! : boolean;
+  languages!            : Array<string>;
+  media_type!           : string;
+  name!                 : string;
+  publisher!            : string;
+  type!                 : string;
+  uri!                  : string;
+}
+
 export class SimplePlaylist {
   collaborative!  : boolean;
   description!    : string;

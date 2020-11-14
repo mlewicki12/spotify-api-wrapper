@@ -7,7 +7,8 @@ import Auth from './auth/auth-code-flow';
 import { AlbumsEndpoint } from './endpoints/albums';
 import { ArtistsEndpoint } from './endpoints/artists';
 import { BrowseEndpoint } from './endpoints/browse';
-import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, SpotifyRecommendationsObject, Recommendation } from './types';
+import { EpisodesEndpoint } from './endpoints/episodes';
+import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, SpotifyRecommendationsObject, Recommendation, Episode } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -165,6 +166,21 @@ export class Spotify {
     }
 
     return {status: 0, message: 'access_data not defined'};
+  }
 
+  getEpisode = async (id: string, params?: SpotifyRequestParams) : Promise<Episode | SpotifyError> => {
+    if(this._access_data) {
+      return EpisodesEndpoint.getEpisode(id, this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getEpisodes = async (ids: Array<string>, params?: SpotifyRequestParams) : Promise<Array<Episode> | SpotifyError> => {
+    if(this._access_data) {
+      return EpisodesEndpoint.getEpisodes(ids, this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
   }
 }

@@ -1,5 +1,6 @@
 
-import Axios, { AxiosRequestConfig } from 'axios';
+import Axios from 'axios';
+import { SpotifyRequestParams } from '../types';
 
 export default class Util {
   private static _characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -24,21 +25,15 @@ export default class Util {
    * wrapper around axios get, so I don't have to include the promise functions every time
    * 
    * @param url - url to make the request to
-   * @param config - request config
+   * @param config - request params
    */
-  static get = (url: string, access_token: string, config?: AxiosRequestConfig) : Promise<any> => {
-    if(!config) {
-      config = {};
-    }
-
-    // this feels kinda dirty, but im not sure how else to do it
-    if(config.headers) {
-      config.headers.Authorization = `Bearer ${access_token}`;
-    } else {
-      config.headers = {
+  static get = (url: string, access_token: string, params?: SpotifyRequestParams) : Promise<any> => {
+    const config = {
+      params: params,
+      headers: {
         Authorization: `Bearer ${access_token}`
-      };
-    }
+      }
+    };
 
     return Axios.get(url, config).then(response => {
       return response.data;}).catch(error => {

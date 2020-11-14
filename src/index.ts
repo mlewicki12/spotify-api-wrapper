@@ -6,13 +6,14 @@ export const Greeter = (name:string) : string => `Hello ${name}`;
 import Auth from './auth/auth-code-flow';
 import { AlbumsEndpoint } from './endpoints/albums';
 import { ArtistsEndpoint } from './endpoints/artists';
-import { Album, Artist, AuthError, AuthObject, Error, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track } from './types';
+import { BrowseEndpoint } from './endpoints/browse';
+import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, SpotifyRecommendationsObject, SpotifyRecommendationsBuilder, Recommendation } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
 }
 
-export class SpotifyAPI {
+export class Spotify {
   private _clientId       : string;
   private _clientSecret   : string;
 
@@ -49,12 +50,12 @@ export class SpotifyAPI {
     }
   }
 
-  setAccessToken = (token: AuthObject) : SpotifyAPI => {
+  setAccessToken = (token: AuthObject) : Spotify => {
     this._access_data = token;
     return this;
   }
 
-  getAlbum = async (id: string) : Promise<Album | Error> => {
+  getAlbum = async (id: string) : Promise<Album | SpotifyError> => {
     if(this._access_data) {
       return AlbumsEndpoint.getAlbum(id, this._access_data.access_token);
     }
@@ -62,7 +63,7 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getAlbums = async (ids: Array<string>) : Promise<Array<Album> | Error> => {
+  getAlbums = async (ids: Array<string>) : Promise<Array<Album> | SpotifyError> => {
     if(this._access_data) {
       return AlbumsEndpoint.getAlbums(ids, this._access_data.access_token);
     }
@@ -70,7 +71,7 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getAlbumTracks = async (id: string, params?: SpotifyRequestParams) : Promise<Paging<SimpleTrack> | Error> => {
+  getAlbumTracks = async (id: string, params?: SpotifyRequestParams) : Promise<Paging<SimpleTrack> | SpotifyError> => {
     if(this._access_data) {
       return AlbumsEndpoint.getTracks(id, this._access_data.access_token, params);
     }
@@ -78,7 +79,7 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getArtist = async (id: string) : Promise<Artist | Error> => {
+  getArtist = async (id: string) : Promise<Artist | SpotifyError> => {
     if(this._access_data) {
       return ArtistsEndpoint.getArtist(id, this._access_data.access_token);
     }
@@ -86,7 +87,7 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getArtists = async (ids: Array<string>) : Promise<Array<Artist> | Error> => {
+  getArtists = async (ids: Array<string>) : Promise<Array<Artist> | SpotifyError> => {
     if(this._access_data) {
       return ArtistsEndpoint.getArtists(ids, this._access_data.access_token);
     }
@@ -94,7 +95,7 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getArtistAlbums = async (id: string, params?: SpotifyRequestParams) : Promise<Paging<SimpleAlbum> | Error> => {
+  getArtistAlbums = async (id: string, params?: SpotifyRequestParams) : Promise<Paging<SimpleAlbum> | SpotifyError> => {
     if(this._access_data) {
       return ArtistsEndpoint.getAlbums(id, this._access_data.access_token, params);
     }
@@ -102,7 +103,7 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getArtistTopTracks = async (id: string, country: string) : Promise<Array<Track> | Error> => {
+  getArtistTopTracks = async (id: string, country: string) : Promise<Array<Track> | SpotifyError> => {
     if(this._access_data) {
       return ArtistsEndpoint.getTopTracks(id, this._access_data.access_token, country);
     }
@@ -110,11 +111,63 @@ export class SpotifyAPI {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getRelatedArtists = async (id: string) : Promise<Array<Track> | Error> => {
+  getRelatedArtists = async (id: string) : Promise<Array<Track> | SpotifyError> => {
     if(this._access_data) {
       return ArtistsEndpoint.getRelatedArtists(id, this._access_data.access_token);
     }
 
     return {status: 0, message: 'access_data not defined'};
+  }
+
+  getCategory = async (id: string) : Promise<Category | SpotifyError> => {
+    if(this._access_data) {
+      return BrowseEndpoint.getCategory(id, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getCategoryPlaylists = async (id: string, params?: SpotifyRequestParams) : Promise<Paging<SimplePlaylist> | SpotifyError> => {
+    if(this._access_data) {
+      return BrowseEndpoint.getCategoryPlaylists(id, this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getCategoryList = async (params?: SpotifyRequestParams) : Promise<Paging<Category> | SpotifyError> => {
+    if(this._access_data) {
+      return BrowseEndpoint.getCategoryList(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getFeaturedPlaylists = async (params?: SpotifyRequestParams) : Promise<Paging<SimplePlaylist> | SpotifyError> => {
+    if(this._access_data) {
+      return BrowseEndpoint.getFeaturedPlaylists(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getNewReleases = async (params?: SpotifyRequestParams) : Promise<Paging<SimpleAlbum> | SpotifyError> => {
+    if(this._access_data) {
+      return BrowseEndpoint.getNewReleases(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getRecommendations = async (attributes: SpotifyRecommendationsBuilder, params?: SpotifyRequestParams) : Promise<Recommendation | SpotifyError> => {
+    if(this._access_data) {
+      // this is always false, because mapping the type in typescript doesn't actually work
+      // probably gonna rewrite SpotifyRecommendationsBuilder and have it be a static class
+      console.log('get' in attributes);
+      return BrowseEndpoint.getRecommendations('get' in attributes ? attributes.get() : attributes, this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+
   }
 }

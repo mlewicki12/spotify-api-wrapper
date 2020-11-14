@@ -47,7 +47,7 @@ export class BrowseEndpoint {
       params = {};
     }
 
-    Object.assign(params, attributes);
+    params = Object.assign(params, SpotifyRecommendationsObject.build(attributes));
     return await Util.get('https://api.spotify.com/v1/recommendations', access_token, params);
   }
 }

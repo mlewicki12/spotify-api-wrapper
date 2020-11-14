@@ -7,7 +7,7 @@ import Auth from './auth/auth-code-flow';
 import { AlbumsEndpoint } from './endpoints/albums';
 import { ArtistsEndpoint } from './endpoints/artists';
 import { BrowseEndpoint } from './endpoints/browse';
-import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, SpotifyRecommendationsObject, SpotifyRecommendationsBuilder, Recommendation } from './types';
+import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, SpotifyRecommendationsObject, Recommendation } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -159,12 +159,9 @@ export class Spotify {
     return {status: 0, message: 'access_data not defined'};
   }
 
-  getRecommendations = async (attributes: SpotifyRecommendationsBuilder, params?: SpotifyRequestParams) : Promise<Recommendation | SpotifyError> => {
+  getRecommendations = async (attributes: SpotifyRecommendationsObject, params?: SpotifyRequestParams) : Promise<Recommendation | SpotifyError> => {
     if(this._access_data) {
-      // this is always false, because mapping the type in typescript doesn't actually work
-      // probably gonna rewrite SpotifyRecommendationsBuilder and have it be a static class
-      console.log('get' in attributes);
-      return BrowseEndpoint.getRecommendations('get' in attributes ? attributes.get() : attributes, this._access_data.access_token, params);
+      return BrowseEndpoint.getRecommendations(attributes, this._access_data.access_token, params);
     }
 
     return {status: 0, message: 'access_data not defined'};

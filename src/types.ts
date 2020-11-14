@@ -225,121 +225,267 @@ export class SpotifyRequestParams {
 }
 
 export class SpotifyRecommendationsObject {
+  acousticness?             : number | Array<number>;
   max_acousticness?         : number;
   min_acousticness?         : number;
   target_acousticness?      : number;
 
+  danceability?             : number | Array<number>;
   max_danceability?         : number;
   min_danceability?         : number;
   target_danceability?      : number;
 
+  duration_ms?              : number | Array<number>;
   max_duration_ms?          : number;
   min_duration_ms?          : number;
   target_duration_ms?       : number;
 
+  energy?                   : number | Array<number>;
   max_energy?               : number;
   min_energy?               : number;
   target_energy?            : number;
 
+  instrumentalness?         : number | Array<number>;
   max_instrumentalness?     : number;
   min_instrumentalness?     : number;
   target_instrumentalness?  : number;
 
+  key?                      : number | Array<number>;
   max_key?                  : number;
   min_key?                  : number;
   target_key?               : number;
   
+  liveness?                 : number | Array<number>;
   max_liveness?             : number;
   min_liveness?             : number;
   target_liveness?          : number;
 
+  loudness?                 : number | Array<number>;
   max_loudness?             : number;
   min_loudness?             : number;
   target_loudness?          : number;
 
+  mode?                     : number | Array<number>;
   max_mode?                 : number;
   min_mode?                 : number;
   target_mode?              : number;
 
+  popularity?               : number | Array<number>;
   max_popularity?           : number;
   min_popularity?           : number;
   target_popularity?        : number;
 
+  speechiness?              : number | Array<number>;
   max_speechiness?          : number;
   min_speechiness?          : number;
   target_speechiness?       : number;
 
+  tempo?                    : number | Array<number>;
   max_tempo?                : number;
   min_tempo?                : number;
   target_tempo?             : number;
 
+  time_signature?           : number | Array<number>;
   max_time_signature?       : number;
   min_time_signature?       : number;
   target_time_signature?    : number;
 
+  valence?                  : number | Array<number>;
   max_valence?              : number;
   min_valence?              : number;
   target_valence?           : number;
 
+  artists?                  : Array<string>;
   seed_artists?             : string;
+
+  genres?                   : Array<string>;
   seed_genres?              : string;
+
+  tracks?                   : Array<string>;
   seed_tracks?              : string;
-}
 
-/**
- * helper class for building a SpotifyRecommendationsObject
- */
-export class SpotifyRecommendationsBuilder {
-  seed_artists?     : Array<string>;
-  seed_genres?      : Array<string>;
-  seed_tracks?      : Array<string>;
+  static build = (values: SpotifyRecommendationsObject) : SpotifyRecommendationsObject => {
+    values.seed_artists = values.seed_artists || values.artists?.join(',');
+    values.seed_genres = values.seed_genres || values.genres?.join(',');
+    values.seed_tracks = values.seed_tracks || values.tracks?.join(',');
 
-  // this lets me manipulate strings as keys
-  private _return_object: {
-    [key: string]: number | undefined;
-  };
+    values.artists = undefined;
+    values.genres = undefined;
+    values.tracks = undefined;
 
-  private _keys = ['acousticness', 'danceability', 'duration_ms', 'energy',
-    'instrumentalness', 'key', 'liveness', 'loudness',
-    'mode', 'popularity', 'speechiness', 'tempo',
-    'time_signature', 'valence'];
+    let val: number | Array<number>; // variable so i can get around typescript's type checking
 
-  constructor(values?: {[key: string] : number | Array<number>}) {
-    this._return_object = {};
+    // kinda pains me to do this all separately, but at least it'll make the user interface slightly betters
+    // tradeoffs, right?
+    if(values.acousticness) {
+      val = values.acousticness;
+      if(val && typeof val === 'number') {
+        values.target_acousticness = val;
+      } else if(val) {
+        values.min_acousticness = (val as Array<number>)[0];
+        values.max_acousticness = (val as Array<number>)[1];
+      }
 
-    if(values) {
-      this._keys.forEach(key => {
-        const element = values[key];
-        if(typeof element === 'number') {
-          this._return_object[`target_${key}`] = element;
-        } else {          
-          this._return_object[`min_${key}`] = element[0];
-          this._return_object[`max_${key}`] = element[1];
-        }
-      });
-
-    }
-  }
-
-  /**
-   * set an attribute
-   * 
-   * @param key - the name of the attribute you want to set
-   * @param value - what value to set the attribute to
-   * @param value_max - (optional) sets the first value to be min value and the second one to be max
-   */
-  set = (key: string, value: number, value_max?: number) : SpotifyRecommendationsBuilder => {
-    if(value_max) {
-      this._return_object[`min_${key}`] = value;
-      this._return_object[`max_${key}`] = value_max;
-      return this;
+      // kill the value so we don't have any extra information
+      values.acousticness = undefined;
     }
 
-    this._return_object[`target_${key}`] = value;
-    return this;
-  }
+    if(values.danceability) {
+      val = values.danceability;
+      if(val && typeof val === 'number') {
+        values.target_danceability = val;
+      } else if(val) {
+        values.min_danceability = (val as Array<number>)[0];
+        values.max_danceability = (val as Array<number>)[1];
+      }
 
-  get = () : SpotifyRecommendationsObject => {
-    return this._return_object;
+      values.danceability = undefined;
+    }
+
+    if(values.duration_ms) {
+      val = values.duration_ms;
+      if(val && typeof val === 'number') {
+        values.target_duration_ms = val;
+      } else if(val) {
+        values.min_duration_ms = (val as Array<number>)[0];
+        values.max_duration_ms = (val as Array<number>)[1];
+      }
+
+      values.duration_ms = undefined;
+    }
+
+    if(values.energy) {
+      val = values.energy;
+      if(val && typeof val === 'number') {
+        values.target_energy = val;
+      } else if(val) {
+        values.min_energy = (val as Array<number>)[0];
+        values.max_energy = (val as Array<number>)[1];
+      }
+      
+      values.energy = undefined;
+    }
+
+    if(values.instrumentalness) {
+      val = values.instrumentalness;
+      if(val && typeof val === 'number') {
+        values.target_instrumentalness = val;
+      } else if(val) {
+        values.min_instrumentalness = (val as Array<number>)[0];
+        values.max_instrumentalness = (val as Array<number>)[1];
+      }
+
+      values.instrumentalness = undefined;
+    }
+
+    if(values.key) {
+      val = values.key;
+      if(val && typeof val === 'number') {
+        values.target_key = val;
+      } else if(val) {
+        values.min_key = (val as Array<number>)[0];
+        values.max_key = (val as Array<number>)[1];
+      }
+
+      values.key = undefined;
+    }
+
+    if(values.liveness) {
+      val = values.liveness;
+      if(val && typeof val === 'number') {
+        values.target_liveness = val;
+      } else if(val) {
+        values.min_liveness = (val as Array<number>)[0];
+        values.max_liveness = (val as Array<number>)[1];
+      }
+
+      values.liveness = undefined;
+    }
+
+    if(values.loudness) {
+      val = values.loudness;
+      if(val && typeof val === 'number') {
+        values.target_loudness = val;
+      } else if(val) {
+        values.min_loudness = (val as Array<number>)[0];
+        values.max_loudness = (val as Array<number>)[1];
+      }
+      
+      values.loudness = undefined;
+    }
+
+    if(values.mode) {
+      val = values.mode;
+      if(val && typeof val === 'number') {
+        values.target_mode = val;
+      } else if(val) {
+        values.min_mode = (val as Array<number>)[0];
+        values.max_mode = (val as Array<number>)[1];
+      }
+
+      values.mode = undefined;
+    }
+
+    if(values.popularity) {
+      val = values.popularity;
+      if(val && typeof val === 'number') {
+        values.target_popularity = val;
+      } else if(val) {
+        values.min_popularity = (val as Array<number>)[0];
+        values.max_popularity = (val as Array<number>)[1];
+      }
+
+      values.popularity = undefined;
+    }
+
+    if(values.speechiness) {
+      val = values.speechiness;
+      if(val && typeof val === 'number') {
+        values.target_speechiness = val;
+      } else if(val) {
+        values.min_speechiness = (val as Array<number>)[0];
+        values.max_speechiness = (val as Array<number>)[1];
+      }
+
+      values.speechiness = undefined;
+    }
+
+    if(values.tempo) {
+      val = values.tempo;
+      if(val && typeof val === 'number') {
+        values.target_tempo = val;
+      } else if(val) {
+        values.min_tempo = (val as Array<number>)[0];
+        values.max_tempo = (val as Array<number>)[1];
+      }
+
+      values.tempo = undefined;
+    }
+
+    if(values.time_signature) {
+      val = values.time_signature;
+      if(val && typeof val === 'number') {
+        values.target_time_signature = val;
+      } else if(val) {
+        values.min_time_signature = (val as Array<number>)[0];
+        values.max_time_signature = (val as Array<number>)[1];
+      }
+
+      values.time_signature = undefined;
+    }
+
+    if(values.valence) {
+      val = values.valence;
+      if(val && typeof val === 'number') {
+        values.target_valence = val;
+      } else if(val) {
+        values.min_valence = (val as Array<number>)[0];
+        values.max_valence = (val as Array<number>)[1];
+      }
+
+      values.valence = undefined;
+    }
+
+    return values;
   }
 }

@@ -208,6 +208,10 @@ export class SpotifyError {
   message!: string;
 }
 
+export class SpotifySuccess {
+  status!: number;
+}
+
 export class Followers {
   href!   : string;
   total!  : number;
@@ -220,7 +224,10 @@ export class Image {
 }
 
 export class Paging<T> {
+  // this is used in one specific example, somewhere in browse
+  // might be better to split it off into its own thing
   message?    : string;
+
   href!       : string;
   items!      : Array<T>;
   limit!      : number;
@@ -228,6 +235,19 @@ export class Paging<T> {
   offset!     : number;
   previous!   : string;
   total!      : number;
+}
+
+export class CursorPaging<T> {
+  href!       : string;
+  items!      : Array<T>;
+  limit!      : number;
+  next!       : string;
+  cursors!    : Cursor;
+  total!      : number;
+}
+
+export class Cursor {
+  after!      : string;
 }
 
 export class Restriction {
@@ -305,8 +325,9 @@ export class SpotifyRequestParams {
   limit?            : number;
   offset?           : number;
   locale?           : string;
-  ids?              : string;
+  ids?              : string | Array<string>;
   timestamp?        : string;
+  type?             : string;
 }
 
 export class SpotifyRecommendationsObject {

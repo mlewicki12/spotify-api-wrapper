@@ -343,6 +343,7 @@ export class SpotifyRequestParams {
   ids?              : string | Array<string>;
   timestamp?        : string;
   type?             : string;
+  time_range?       : string;
 }
 
 export class SpotifyRecommendationsObject {

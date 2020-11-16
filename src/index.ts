@@ -1,8 +1,4 @@
 
-// this is still here as a leftover from the tutorial I did on setting up packages
-// leaving it here for now, bc I want to keep the test as a reference
-export const Greeter = (name:string) : string => `Hello ${name}`;
-
 import Auth from './auth/auth-code-flow';
 import { AlbumsEndpoint } from './endpoints/albums';
 import { ArtistsEndpoint } from './endpoints/artists';
@@ -10,6 +6,7 @@ import { BrowseEndpoint } from './endpoints/browse';
 import { EpisodesEndpoint } from './endpoints/episodes';
 import { FollowEndpoint } from './endpoints/follow';
 import { LibraryEndpoint } from './endpoints/library';
+import { PersonalizationEndpoint } from './endpoints/personalization';
 import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, 
   Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, 
   SpotifyRecommendationsObject, Recommendation, Episode, SpotifySuccess, CursorPaging, 
@@ -336,6 +333,22 @@ export class Spotify {
   saveTracks = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
     if(this._access_data) {
       return LibraryEndpoint.saveTracks(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getTopArtists = async (params?: SpotifyRequestParams) : Promise<Paging<Artist> | SpotifyError> => {
+    if(this._access_data) {
+      return PersonalizationEndpoint.getTopArtists(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getTopTracks = async (params?: SpotifyRequestParams) : Promise<Paging<Track> | SpotifyError> => {
+    if(this._access_data) {
+      return PersonalizationEndpoint.getTopTracks(this._access_data.access_token, params);
     }
 
     return {status: 0, message: 'access_data not defined'};

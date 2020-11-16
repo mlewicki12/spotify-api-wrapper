@@ -9,7 +9,11 @@ import { ArtistsEndpoint } from './endpoints/artists';
 import { BrowseEndpoint } from './endpoints/browse';
 import { EpisodesEndpoint } from './endpoints/episodes';
 import { FollowEndpoint } from './endpoints/follow';
-import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, SpotifyRecommendationsObject, Recommendation, Episode, SpotifySuccess, CursorPaging } from './types';
+import { LibraryEndpoint } from './endpoints/library';
+import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, 
+  Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, 
+  SpotifyRecommendationsObject, Recommendation, Episode, SpotifySuccess, CursorPaging, 
+  SavedShow, SavedAlbum, SavedTrack } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -236,6 +240,102 @@ export class Spotify {
   unfollowPlaylist = async (id: string) : Promise<SpotifySuccess | SpotifyError> => {
     if(this._access_data) {
       return FollowEndpoint.unfollowPlaylist(id, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  checkSavedAlbums = async (ids: Array<string>) : Promise<Array<boolean> | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.checkSavedAlbums(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  } 
+
+  checkSavedShows = async (ids: Array<string>) : Promise<Array<boolean> | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.checkSavedShows(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  } 
+
+  checkSavedTracks = async (ids: Array<string>) : Promise<Array<boolean> | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.checkSavedTracks(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  } 
+
+  getSavedAlbums = async (params?: SpotifyRequestParams) : Promise<Paging<SavedAlbum> | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.getSavedAlbums(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getSavedShows = async (params?: SpotifyRequestParams) : Promise<Paging<SavedShow> | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.getSavedShows(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getSavedTracks = async (params?: SpotifyRequestParams) : Promise<Paging<SavedTrack> | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.getSavedTracks(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  deleteSavedAlbums = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.removeSavedAlbums(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  deleteSavedShows = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.removeSavedShows(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  deleteSavedTracks = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.removeSavedTracks(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  saveAlbums = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.saveAlbums(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  saveShows = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.saveShows(ids, this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  saveTracks = async (ids: Array<string>) : Promise<SpotifySuccess | SpotifyError> => {
+    if(this._access_data) {
+      return LibraryEndpoint.saveTracks(ids, this._access_data.access_token);
     }
 
     return {status: 0, message: 'access_data not defined'};

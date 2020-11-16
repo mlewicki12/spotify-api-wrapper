@@ -1,4 +1,9 @@
 
+export class SavedAlbum {
+  added_at! : string;
+  album!    : Album;
+}
+
 export class SimpleAlbum {
   album_group?              : string;
   album_type!               : string;
@@ -107,6 +112,11 @@ export class Episode {
 export class ResumePoint {
   fully_played!       : boolean;
   resume_position_ms! : number;
+}
+
+export class SavedShow {
+  added_at! : string;
+  show!     : Show;
 }
 
 export class SimpleShow {
@@ -252,6 +262,11 @@ export class Cursor {
 
 export class Restriction {
   reason!: string;
+}
+
+export class SavedTrack {
+  added_at! : string;
+  track!    : Track;
 }
 
 export class SimpleTrack {

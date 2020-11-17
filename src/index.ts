@@ -7,10 +7,11 @@ import { EpisodesEndpoint } from './endpoints/episodes';
 import { FollowEndpoint } from './endpoints/follow';
 import { LibraryEndpoint } from './endpoints/library';
 import { PersonalizationEndpoint } from './endpoints/personalization';
+import { PlayerEndpoint } from './endpoints/player';
 import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, 
   Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, 
   SpotifyRecommendationsObject, Recommendation, Episode, SpotifySuccess, CursorPaging, 
-  SavedShow, SavedAlbum, SavedTrack } from './types';
+  SavedShow, SavedAlbum, SavedTrack, Device, CurrentlyPlayingContext, PlayHistory, CurrentlyPlaying } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -349,6 +350,46 @@ export class Spotify {
   getTopTracks = async (params?: SpotifyRequestParams) : Promise<Paging<Track> | SpotifyError> => {
     if(this._access_data) {
       return PersonalizationEndpoint.getTopTracks(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getAvailableDevices = async () : Promise<Array<Device> | SpotifyError> => {
+    if(this._access_data) {
+      return PlayerEndpoint.getAvailableDevices(this._access_data.access_token);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getCurrentPlayback = async (params?: SpotifyRequestParams) : Promise<CurrentlyPlayingContext | SpotifyError> => {
+    if(this._access_data) {
+      return PlayerEndpoint.getCurrentPlayback(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getRecentlyPlayed = async (params?: SpotifyRequestParams) : Promise<CursorPaging<PlayHistory> | SpotifyError> => {
+    if(this._access_data) {
+      return PlayerEndpoint.getRecentlyPlayed(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  getCurrentlyPlaying = async (params?: SpotifyRequestParams) : Promise<CurrentlyPlaying | SpotifyError> => {
+    if(this._access_data) {
+      return PlayerEndpoint.getCurrentlyPlaying(this._access_data.access_token, params);
+    }
+
+    return {status: 0, message: 'access_data not defined'};
+  }
+
+  pausePlayback = (params?: SpotifyRequestParams) : SpotifyError | void => {
+    if(this._access_data) {
+      PlayerEndpoint.pausePlayback(this._access_data.access_token, params);
     }
 
     return {status: 0, message: 'access_data not defined'};

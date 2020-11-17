@@ -66,6 +66,98 @@ export class Artist {
   uri!            : string;
 }
 
+export class Disallows {
+  interrupting_playback?   : boolean;
+  pausing?                 : boolean;
+  resuming?                : boolean;
+  seeking?                 : boolean;
+  skipping_next?           : boolean;
+  skipping_prev?           : boolean;
+  toggling_repeat_context? : boolean;
+  toggling_shuffle?        : boolean;
+  toggling_repeat_track?   : boolean;
+  transferring_playback?   : boolean;  
+}
+
+export class Actions {
+  disallows!: Disallows;
+}
+
+export class Context {
+  uri!           : string;
+  href!          : string;
+  external_urls! : any;
+  type!          : string;
+}
+
+export enum ContextType {
+  Artist   = 'artist',
+  Playlist = 'playlist',
+  Album    = 'album'
+}
+
+export enum CurrentlyPlayingType {
+  Track   = 'track',
+  Episode = 'episode',
+  Ad      = 'ad',
+  Unknown = 'unknown'
+}
+
+export enum RepeatState {
+  Off     = 'off',
+  Track   = 'track',
+  Context = 'context'
+}
+
+export class CurrentlyPlaying {
+  context!                : Context;
+  timestamp!              : number;
+  progress_ms!            : number;
+  is_playing!             : boolean;
+  item!                   : Track | Episode;
+  currently_playing_type! : CurrentlyPlayingType;
+  actions!                : Actions;
+}
+
+export class CurrentlyPlayingContext {
+  device!                 : Device;
+  repeat_state!           : RepeatState;
+  shuffle_state!          : boolean;
+  context?                : Context;
+  timestamp!              : number;
+  progress_ms?            : number;
+  is_playing!             : boolean;
+  item!                   : Track | Episode;
+  currently_playing_type! : CurrentlyPlayingType;
+  actions!                : Actions;
+}
+
+export enum DeviceType {
+  Computer    = 'Computer',
+  Tablet      = 'Tablet',
+  Smartphone  = 'Smartphone',
+  Speaker     = 'Speaker',
+  TV          = 'TV',
+  AVR         = 'AVR',
+  STB         = 'STB',
+  AudioDongle = 'AudioDongle',
+  GameConsole = 'GameConsole',
+  CastVideo   = 'CastVideo',
+  CastAudio   = 'CastAudio',
+  Automobile  = 'Automobile',
+  Unknown     = 'Unknown'
+}
+
+export class Device {
+  id?                 : string;
+  is_active!          : boolean;
+  is_private_session! : boolean;
+  is_restricted!      : boolean;
+  name!               : string;
+  type!               : string;
+  volume_percent!     : number;
+}
+
 export class SimpleEpisode {
   audio_preview_url!      : string;
   description!            : string;
@@ -233,6 +325,12 @@ export class Image {
   url!      : string;
 }
 
+export class PlayHistory {
+  track!     : SimpleTrack;
+  played_at! : string;
+  context!   : Context;
+}
+
 export class Paging<T> {
   // this is used in one specific example, somewhere in browse
   // might be better to split it off into its own thing
@@ -344,6 +442,10 @@ export class SpotifyRequestParams {
   timestamp?        : string;
   type?             : string;
   time_range?       : string;
+  after?            : string;
+  before?           : string;
+  additional_types? : string;
+  device_id?        : string;
 }
 
 export class SpotifyRecommendationsObject {

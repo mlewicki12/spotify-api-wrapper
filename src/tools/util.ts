@@ -61,6 +61,25 @@ export default class Util {
   }
 
   /**
+   * wrapper around axios post, attaches access token to request
+   * 
+   * @param url - url to make the request to
+   * @param access_token - spotify access token
+   * @param params - (optional) parameters to add onto the request
+   */
+  static post = (url: string, access_token: string, params?: SpotifyRequestParams) : Promise<any> => {
+    return Axios.post(url, params, {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    }).then(data => {
+      return {status: data.status};
+    }).catch(error => {
+      return error.response.data;
+    });
+  }
+
+  /**
    * wrapper around axios delete, attaches access token to request
    * 
    * @param url - url to make the request to 

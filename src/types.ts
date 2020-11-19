@@ -306,8 +306,8 @@ export class AuthError {
 }
 
 export class SpotifyError {
-  status!: number;
-  message!: string;
+  status!  : number;
+  message! : string;
 }
 
 export class SpotifySuccess {
@@ -446,6 +446,9 @@ export class SpotifyRequestParams {
   before?           : string;
   additional_types? : string;
   device_id?        : string;
+  device_ids?       : Array<string>;
+  position_ms?      : number;
+  play?             : boolean;
 }
 
 export class SpotifyRecommendationsObject {

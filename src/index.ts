@@ -8,10 +8,11 @@ import { FollowEndpoint } from './endpoints/follow';
 import { LibraryEndpoint } from './endpoints/library';
 import { PersonalizationEndpoint } from './endpoints/personalization';
 import { PlayerEndpoint } from './endpoints/player';
+import { PlaylistsEndpoint } from './endpoints/playlists';
 import { Album, Artist, AuthError, AuthObject, Category, SpotifyError, 
   Paging, SimpleAlbum, SimpleTrack, SpotifyRequestParams, Track, SimplePlaylist, 
   SpotifyRecommendationsObject, Recommendation, Episode, SpotifySuccess, CursorPaging, 
-  SavedShow, SavedAlbum, SavedTrack, Device, CurrentlyPlayingContext, PlayHistory, CurrentlyPlaying, RepeatState } from './types';
+  SavedShow, SavedAlbum, SavedTrack, Device, CurrentlyPlayingContext, PlayHistory, CurrentlyPlaying, RepeatState, PlaylistDetails, Playlist, Image } from './types';
 
 export enum AuthType {
   AuthorizationCodeFlow
@@ -443,6 +444,64 @@ export class Spotify {
     transferPlayback: async (device_id: string, params?: SpotifyRequestParams) : Promise<SpotifySuccess | SpotifyError> => {
       if(this._access_data) {
         return PlayerEndpoint.transferPlayback(device_id, this._access_data.access_token, params);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    }
+  }
+
+  playlists = {
+    addItems: async (playlist_id: string, uris: Array<string>, params?: SpotifyRequestParams) : Promise<SpotifySuccess | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.addItems(playlist_id, this._access_data.access_token, uris, params);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    },
+
+    changeDetails: async (playlist_id: string, details: PlaylistDetails) : Promise<SpotifySuccess | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.changeDetails(playlist_id, this._access_data.access_token, details);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    },
+
+    create: async (user_id: string, details: PlaylistDetails) : Promise<Playlist | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.create(user_id, this._access_data.access_token, details);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    },
+
+    getUserPlaylist: async (paramsOrId?: string | SpotifyRequestParams, params?: SpotifyRequestParams) : Promise<Paging<SimplePlaylist> | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.getUserPlaylist(this._access_data.access_token, paramsOrId, params);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    },
+
+    get: async (playlist_id: string, params?: SpotifyRequestParams) : Promise<Playlist | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.get(playlist_id, this._access_data.access_token, params);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    },
+
+    getCoverImage: async (playlist_id: string) : Promise<Array<Image> | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.getCoverImage(playlist_id, this._access_data.access_token);
+      }
+
+      return {status: 0, message: 'access_data not defined'};
+    },
+
+    getTracks: async (playlist_id: string, params?: SpotifyRequestParams) : Promise<Paging<Episode | Track> | SpotifyError> => {
+      if(this._access_data) {
+        return PlaylistsEndpoint.getTracks(playlist_id, this._access_data.access_token, params);
       }
 
       return {status: 0, message: 'access_data not defined'};

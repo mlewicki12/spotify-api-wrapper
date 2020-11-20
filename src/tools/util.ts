@@ -72,8 +72,12 @@ export default class Util {
       headers: {
         Authorization: `Bearer ${access_token}`
       }
-    }).then(data => {
-      return {status: data.status};
+    }).then(response => {
+      if(response.data) {
+        return response.data;
+      }
+
+      return {status: response.status};
     }).catch(error => {
       return error.response.data;
     });

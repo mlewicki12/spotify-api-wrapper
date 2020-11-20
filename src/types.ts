@@ -248,10 +248,34 @@ export class Show {
   uri!                  : string;
 }
 
+export class PlaylistDetails {
+  name?           : string;
+  public?         : boolean;
+  collaborative?  : boolean;
+  description?    : string;
+}
+
 export class SimplePlaylist {
   collaborative!  : boolean;
   description!    : string;
   external_urls!  : any;
+  href!           : string;
+  id!             : string;
+  images!         : Array<Image>;
+  name!           : string;
+  owner!          : PublicUser;
+  public!         : boolean;
+  snapshot_id!    : string;
+  tracks!         : PlaylistTracks;
+  type!           : string;
+  uri!            : string;
+}
+
+export class Playlist {
+  collaborative!  : boolean;
+  description!    : string;
+  external_urls!  : any;
+  followers!      : Followers;
   href!           : string;
   id!             : string;
   images!         : Array<Image>;
@@ -311,7 +335,8 @@ export class SpotifyError {
 }
 
 export class SpotifySuccess {
-  status!: number;
+  status!       : number;
+  snapshot_id?  : string;
 }
 
 export class Followers {
@@ -444,11 +469,18 @@ export class SpotifyRequestParams {
   time_range?       : string;
   after?            : string;
   before?           : string;
+  fields?           : string;
+  market?           : string;
   additional_types? : string;
   device_id?        : string;
   device_ids?       : Array<string>;
+  position?         : number;
   position_ms?      : number;
   play?             : boolean;
+  name?             : string;
+  public?           : boolean;
+  collaborative?    : boolean;
+  description?      : string;
 }
 
 export class SpotifyRecommendationsObject {
